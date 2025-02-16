@@ -1,12 +1,30 @@
-import { addRows } from "./database.js";
+import { createPool } from "mariadb";
 
-async function generateRowsExample() {
-    try {
-        const result = await addRows(10); // Calls the stored procedure with 10 rows
-        console.log("Stored Procedure Output:", result);
-    } catch (error) {
-        console.error("Error calling addRows:", error);
+const sourceHost = "maria.northeurope.cloudapp.azure.com";
+const dbMariaUser = "testi";
+const dbMariaPassword = "mariadb1";
+const dbMaria = "adbms";
+
+
+const pool = createPool({
+  host: sourceHost,
+  user: dbMariaUser,
+  password: dbMariaPassword,
+  database: dbMaria
+});
+
+async function testConnection() {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    console.log("Connected to MariaDB!");
+  } catch (err) {
+    console.error("Error connecting to MariaDB:", err);
+  } finally {
+    if (connection) {
+      connection.release();
     }
+  }
 }
 
-generateRowsExample();
+testConnection();
