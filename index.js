@@ -1,6 +1,6 @@
 import { createPool } from "mariadb";
 
-const sourceHost = "https://nataliau2207363.westeurope.cloudapp.azure.com";
+const sourceHost = "nataliau2207363.westeurope.cloudapp.azure.com";
 const dbMariaUser = "Natasha";
 const dbMariaPassword = "4512";
 const dbMaria = "test2207363db";
