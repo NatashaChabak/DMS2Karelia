@@ -21,7 +21,7 @@ security:
 
 servers:
   - url: http://localhost:3000
-  
+  - url:  https://nataliau2207363.westeurope.cloudapp.azure.com
 tags:
   - name: Sample dataset
     description: Everything you need to know about APIs
