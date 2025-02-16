@@ -23,8 +23,8 @@ const sendQuery = async (sql, doCommit, ...params) => {
 
 const findOneUser = async (username) => sendQuery(`SELECT * FROM users WHERE username = ?`, false, username);
 
-const addRows = (rowsNumber) => sendQuery(`call generateRows(?)`, false, rowsNumber);
-
+const addRows = async (rowsNumber) => sendQuery(`CALL generateRows(?)`, false, rowsNumber);
+   
 const getAllData = async () => 
     sendQuery(`SELECT * FROM data`);
 
