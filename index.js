@@ -1,16 +1,5 @@
-import {createPool} from "mariadb"
-
-const sourceHost = "localhost:3306"
- const dbMariaUser = "Natasha"
-const dbMariaPassword = "4512"
-const dbMaria = "test2270363db"
-
-const pool = createPool({
-  host: sourceHost,
-  user: dbMariaUser,
-  password: dbMariaPassword,
-  database: dbMaria
-});
+import poolObj from './dbPool.js';
+const { pool } = poolObj;
 
 async function testConnection() {
   let connection;
