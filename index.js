@@ -1,30 +1,27 @@
 import { createPool } from "mariadb";
 
-const sourceHost = "maria.northeurope.cloudapp.azure.com";
-const dbMariaUser = "testi";
-const dbMariaPassword = "mariadb1";
-const dbMaria = "adbms";
-
-
 const pool = createPool({
-  host: sourceHost,
-  user: dbMariaUser,
-  password: dbMariaPassword,
-  database: dbMaria
+  host: "maria.northeurope.cloudapp.azure.com",  // Change to your MariaDB host
+  user: "testi", // Your DB username
+  password: "mariadb1", // Your DB password
+  database: "adbms", // Your database name
+  connectionLimit: 5, // Number of connections
 });
 
-async function testConnection() {
-  let connection;
+async function callStoredProcedure() {
+  let conn;
   try {
-    connection = await pool.getConnection();
-    console.log("Connected to MariaDB!");
+    conn = await pool.getConnection();
+
+    // Calling the stored procedure
+    const rows = await conn.query("CALL GenerateRows(10)");
+
+    console.log("Stored Procedure Result:", rows);
   } catch (err) {
-    console.error("Error connecting to MariaDB:", err);
+    console.error("Error calling stored procedure:", err);
   } finally {
-    if (connection) {
-      connection.release();
-    }
+    if (conn) conn.release(); // Release the connection
   }
 }
 
-testConnection();
+callStoredProcedure();
