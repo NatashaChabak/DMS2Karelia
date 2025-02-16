@@ -54,6 +54,7 @@ export {
     getAllData,
     getDataById,
     addData,
+    addRows,
     logonUsers,
 //    getUserByName,
 //    deleteData,
