@@ -1,6 +1,6 @@
 import {createPool} from "mariadb"
 
-const sourceHost = "localhost"
+const sourceHost = "localhost:3306"
  const dbMariaUser = "Natasha"
 const dbMariaPassword = "4512"
 const dbMaria = "test2270363db"
