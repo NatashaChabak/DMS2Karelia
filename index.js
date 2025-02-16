@@ -1,10 +1,10 @@
 import { createPool } from "mariadb";
 
 const pool = createPool({
-  host: "maria.northeurope.cloudapp.azure.com",  // Change to your MariaDB host
-  user: "testi", // Your DB username
-  password: "mariadb1", // Your DB password
-  database: "adbms", // Your database name
+  host: "https://nataliau2207363.westeurope.cloudapp.azure.com",  // Change to your MariaDB host
+  user: "jk", // Your DB username
+  password: "sala", // Your DB password
+  database: "test2207363db", // Your database name
   connectionLimit: 5, // Number of connections
 });
 
