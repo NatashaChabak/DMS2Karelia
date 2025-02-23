@@ -40,7 +40,7 @@ const sendQuery = async (query, toArray = false) => {
 }
 
 const getUserRecordCounts = async () => {
-    const usersCol = await connDbCollection (usersCollection)
+    const usersCol = await connDbCollection(usersCollection);
 
     return sendQuery(
         usersCol.aggregate([
@@ -54,7 +54,7 @@ const getUserRecordCounts = async () => {
             },
             {
                 $match: {
-                    "user_data.0": { $exists: true } 
+                    "user_data.0": { $exists: true } // Inner join: filters users without records
                 }
             },
             {
@@ -139,6 +139,7 @@ process.on("SIGINT", closeDbConnection)
 process.on("SIGNTERM", closeDbConnection)
 
 export {
+    getUserRecordCounts,
     findOneUser,
     getAllData,
     logonUsers
