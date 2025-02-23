@@ -39,6 +39,37 @@ const sendQuery = async (query, toArray = false) => {
     }
 }
 
+const getUserRecordCounts = async () => {
+    const usersCol = await connDbCollection (usersCollection)
+
+    return sendQuery(
+        usersCol.aggregate([
+            {
+                $lookup: {
+                    from: "data",
+                    localField: "username",
+                    foreignField: "userid",
+                    as: "user_data"
+                }
+            },
+            {
+                $match: {
+                    "user_data.0": { $exists: true } 
+                }
+            },
+            {
+                $project: {
+                    username: 1,
+                    users_records: { $size: "$user_data" },
+                    _id: 0
+                }
+            }
+        ]),
+        true
+    );
+};
+
+
 //const findOneUser = async (username) => 
 // sendQuery(`SELECT * FROM users WHERE username = ?`, true, username);
 const findOneUser = async (username) => {
