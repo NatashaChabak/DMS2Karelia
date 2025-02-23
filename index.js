@@ -41,6 +41,7 @@ const sendQuery = async (query, toArray = false) => {
     }
 }
 
+
 const getUserRecordCounts = async () => {
     const usersCol = await connDbCollection(usersCollection);
 
@@ -71,12 +72,15 @@ const getUserRecordCounts = async () => {
     );
 };
 
-getUserRecordCounts()
+getAllUsers()
     .then((data) => {
-        console.log("User Records:", JSON.stringify(data, null, 2)); 
-        process.exit(0); // Exit after execution
+        console.log("All Users:", JSON.stringify(data, null, 2)); // Pretty-print result
+        process.exit(0);
     })
     .catch((err) => {
-        console.error("Error fetching user records:", err);
+        console.error("Error fetching users:", err);
         process.exit(1);
     });
+
+getAllUsers();
+
