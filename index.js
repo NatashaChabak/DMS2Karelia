@@ -9,6 +9,7 @@ const destConnString = `mongodb://${dbUser}:${dbPassword}@${dbHost}?authSource=$
 const dbServer = new MongoClient(destConnString)
 let logonUsers = new Map();
 
+
 // Method for connecting to the database
 const openDbConn = async () => {
     try {
@@ -24,6 +25,8 @@ const openDbConn = async () => {
 const connDbCollection = async (collection) => {
     return db.collection(collection)
 }
+
+const db = await openDbConn()
 
 const sendQuery = async (query, toArray = false) => {
     try {
