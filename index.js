@@ -41,9 +41,39 @@ const sendQuery = async (query, toArray = false) => {
     }
 }
 
-const getAllData = async () => {
-  const dataCol = await connDbCollection (dataCollection)
-  return sendQuery(dataCol.find({}).toArray(), true)
-}
+const getUserRecordCounts = async () => {
+    const usersCol = await connDbCollection(usersCollection);
 
-getAllData();
+    return sendQuery(
+        usersCol.aggregate([
+            {
+                $lookup: {
+                    from: "data",
+                    localField: "username",
+                    foreignField: "userid",
+                    as: "user_data"
+                }
+            },
+            {
+                $match: {
+                    "user_data.0": { $exists: true } // Inner join: filters users without records
+                }
+            },
+            {
+                $project: {
+                    username: 1,
+                    users_records: { $size: "$user_data" },
+                    _id: 0
+                }
+            }
+        ]),
+        true
+    );
+};
+
+getUserRecordCounts()
+    .then(() => process.exit(0)) // Exit after execution
+    .catch(err => {
+        console.error(err);
+        process.exit(1);
+    });
