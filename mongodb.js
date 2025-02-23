@@ -140,5 +140,6 @@ process.on("SIGNTERM", closeDbConnection)
 
 export {
     findOneUser,
+    getAllData,
     logonUsers
 }
