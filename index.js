@@ -72,6 +72,13 @@ const getUserRecordCounts = async () => {
     );
 };
 
+const getAllUsers = async () => {
+    const usersCol = await connDbCollection("users");
+
+    return sendQuery(usersCol.find({}), true); // `find({})` selects all documents
+};
+
+
 getAllUsers()
     .then((data) => {
         console.log("All Users:", JSON.stringify(data, null, 2)); // Pretty-print result
@@ -82,5 +89,4 @@ getAllUsers()
         process.exit(1);
     });
 
-getAllUsers();
 
