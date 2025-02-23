@@ -1,18 +1,25 @@
-import poolObj from './dbPool.js';
-const { pool } = poolObj;
+import { MongoClient, ObjectId } from 'mongodb'
+const dbHost = "localhost:27017"
+const dbUser = "jyri"
+const dbPassword = "Salasana1"
+const dbName = "testi"
+const dataCollection = "data"
+const usersCollection = "users"
+const destConnString = `mongodb://${dbUser}:${dbPassword}@${dbHost}?authSource=${dbName}`
+const dbServer = new MongoClient(destConnString)
 
-async function testConnection() {
-  let connection;
-  try {
-    connection = await pool.getConnection();
-    console.log("Connected to MariaDB!");
-  } catch (err) {
-    console.error("Error connecting to MariaDB:", err);
-  } finally {
-    if (connection) {
-      connection.release();
+let logonUsers = new Map();
+
+// Method for connecting to the database
+const openDbConn = async () => {
+    try {
+        await dbServer.connect();
+        return dbServer.db(dbName)
+    } catch (error) {
+        console.error("Failed to conencto to the database", error)
+        throw error;
     }
-  }
 }
 
-testConnection();
+
+openDbConn();
