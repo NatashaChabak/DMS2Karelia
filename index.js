@@ -42,6 +42,7 @@ const sendQuery = async (query, toArray = false) => {
 }
 
 
+
 const getUserRecordCounts = async () => {
     const usersCol = await connDbCollection(usersCollection);
 
@@ -72,21 +73,14 @@ const getUserRecordCounts = async () => {
     );
 };
 
-const getAllUsers = async () => {
-    const usersCol = await connDbCollection("users");
-
-    return sendQuery(usersCol.find({}), true); // `find({})` selects all documents
-};
 
 
-getAllUsers()
+getUserRecordCounts()
     .then((data) => {
-        console.log("All Users:", JSON.stringify(data, null, 2)); // Pretty-print result
-        process.exit(0);
+        console.log("User Records:", JSON.stringify(data, null, 2)); 
+        process.exit(0); // Exit after execution
     })
     .catch((err) => {
-        console.error("Error fetching users:", err);
+        console.error("Error fetching user records:", err);
         process.exit(1);
     });
-
-
