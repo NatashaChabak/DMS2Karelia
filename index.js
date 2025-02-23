@@ -1,33 +1,46 @@
-import {MongoClient, ObjectId} from "mongodb"
-const destHost = 'localhost:27017'
-const dbAdmin = "mongoAdmin"
-const dbAdminPassword = "Salasana1"
-const authDb = "admin"
-const destConnString = `mongodb://${dbAdmin}:${dbAdminPassword}@${destHost}?authSource=${authDb}`
-const dbMongo = "testi"
-const dbMongoUser = "jyri"
-const dbMongoPassword = "Salasana1"
+import { MongoClient, ObjectId } from 'mongodb'
+const dbHost = "localhost:27017"
+const dbUser = "jyri"
+const dbPassword = "Salasana1"
+const dbName = "testi"
 const dataCollection = "data"
-const usersCollection = "user"
+const usersCollection = "users"
+const destConnString = `mongodb://${dbUser}:${dbPassword}@${dbHost}?authSource=${dbName}`
+const dbServer = new MongoClient(destConnString)
+let logonUsers = new Map();
 
-const listDatabases = async () => {
-  const dbServer = new MongoClient(destConnString)
+// Method for connecting to the database
+const openDbConn = async () => {
+    try {
+        await dbServer.connect();
+        return dbServer.db(dbName)
+    } catch (error) {
+        console.error("Failed to conencto to the database", error)
+        throw error;
+    }
+}
 
-  try {
-      await dbServer.connect();
-      
-      const databases = await dbServer.db().admin().listDatabases();
+// Method for using a certain collection
+const connDbCollection = async (collection) => {
+    return db.collection(collection)
+}
 
-      console.log("Databases:");
-      databases.databases.forEach(db => console.log(`- ${db.name}`));
+const sendQuery = async (query, toArray = false) => {
+    try {
+        const result = await query
+        if(toArray)
+            return await result.toArray()
+        else 
+            console.log("should do something")
+    } catch (err) {
+        console.error("Query execution failed", err)
+        throw err
+    }
+}
 
-  } catch (err) {
-      console.error("Error listing databases:", err);
-  } finally {
-      await dbServer.close(); // Close connection
-  }
-};
+const getAllData = async () => {
+  const dataCol = await connDbCollection (dataCollection)
+  return sendQuery(dataCol.find({}).toArray(), true)
+}
 
-
-listDatabases();
-
+getAllData();
