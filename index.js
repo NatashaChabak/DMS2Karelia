@@ -72,8 +72,11 @@ const getUserRecordCounts = async () => {
 };
 
 getUserRecordCounts()
-    .then(() => process.exit(0)) // Exit after execution
-    .catch(err => {
-        console.error(err);
+    .then((data) => {
+        console.log("User Records:", JSON.stringify(data, null, 2)); 
+        process.exit(0); // Exit after execution
+    })
+    .catch((err) => {
+        console.error("Error fetching user records:", err);
         process.exit(1);
     });
