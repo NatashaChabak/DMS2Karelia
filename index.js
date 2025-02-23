@@ -24,7 +24,7 @@ const listDatabases = async () => {
   } catch (err) {
       console.error("Error listing databases:", err);
   } finally {
-      await client.close(); // Close connection
+      await dbServer.close(); // Close connection
   }
 };
 
