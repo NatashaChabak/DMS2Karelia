@@ -1,9 +1,14 @@
 // for MariaDB
 import {createPool} from "mariadb"
 const sourceHost = "maria.northeurope.cloudapp.azure.com"
+// const sourceHost = "localhost"
 const dbMariaUser = "testi"
+// const dbMariaUser = "jyri"
 const dbMariaPassword = "mariadb1"
+// const dbMariaPassword = "Salasana1"
 const dbMaria = "adbms"
+// const dbMaria = "testi"
+
 
 // for MongoDB
 import {MongoClient, ObjectId} from "mongodb"
@@ -75,7 +80,56 @@ const createCollections = async (usersData, dataData) => {
         let result = await users.insertMany(usersData)
         console.log(`${result.insertedCount} users were inserted`)
 
+        const data = db.collection( dataCollection, {
+            validator: { $jsonSchema: {
+                bsonType: "object",
+                required: ["id", "Firstname", "Surname", "userid"],
+                properties: {
+                    _id: {
+                        bsonType: ObjectId,
+                        description: "Must contain unique hex value"
+                    },
+                    Firstname: {
+                        bsonType: "string",
+                        description: "must be a string and is required"
+                    },
+                    Surname: {
+                        bsonType: "string",
+                        description: "must be a string and is required"
+                    },
+                    userid: {
+                        bsonType: "string",
+                        description: "must be a string and it should be in users colelction, too"
+                    },
+                }
+            }}
+        })
 
+        const processedData = await dataData.map(doc => {
+            return {
+                _id: ObjectId.createFromHexString(doc.id.toString(16).padStart(24,'0')),
+                Firstname: doc.Firstname,
+                Surname: doc.Surname,
+                userid: doc.userid
+            }
+        })
+        
+        console.log(processedData)
+
+        result = await data.insertMany(processedData)
+        console.log(`${result.insertedCount} data records were inserted`)
+        
+        const userExist = await db.command({ usersInfo: dbMongoUser})
+        if(!userExist.users[0]) {
+            result = await db.command({
+                createUser: dbMongoUser,
+                pwd: dbMongoPassword,
+                roles: [{role: 'readWrite', db: dbMongo}]
+            })
+            console.log("User created successfully", result)
+        } else
+            console.log("User", userExist.users[0].user, "already exist with roles:", 
+                        userExist.users[0].roles)
     } catch (e) {
         console.log(e)
     } finally {
